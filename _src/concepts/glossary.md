@@ -85,34 +85,35 @@ Data returned from a [rule](#rule) function. It's the only way that information 
 Distributed execution of [actions](#action) on remote workers. It can speed up builds significantly, by scaling the nodes available for parallel actions and by caching action outputs across buck2 users.
 
 #### Rule
-:::note
-🚧   THIS SECTION IS UNDER CONSTRUCTION
-:::
-#### Source file
-:::note
-🚧   THIS SECTION IS UNDER CONSTRUCTION
-:::
-#### Starlark
-:::note
-🚧   THIS SECTION IS UNDER CONSTRUCTION
-:::
+
+A rule consists of an attribute spec and an implementation, which is a [Starlark](#starlark) function.
+
+The attribute spec declares what attributes the rule expects to receive. The rule implementation receives the [attributes](#attribute) of a [target](#target) and the [providers](#provider) of its [dependencies](#dependency). It can declare new [actions](#action) and [artifacts](#artifact), and must return [providers](#provider) that can be used to pass data to its dependents or to Buck2 itself.
+
+Rules are instantiated in [build files](#build-file) to declare targets and set their attributes. The rule implementation is called when Buck2 needs its providers, which can happen when the target is built, or when one of its dependents is.
+
+As an example, you would use the `cxx_binary` rule to create a C++ binary, but you would use the `android_binary` rule to create an Android APK
+
 #### Target
-:::note
-🚧   THIS SECTION IS UNDER CONSTRUCTION
-:::
+
+Object that is defined in a [build file](#build-file). Targets represent the buildable units of a build from the perspective of the end user. Declared by instantiating a [rule](#rule) with attributes. A target has [dependencies](#dependency), which are references to other targets.
+
+#### Target label
+
+Identifier for a [target](#target). Structured as `cellAlias//path/to/package:target` where `cellAlias//` maps to a [cell root](#cell) path (as defined in the [./buckconfig](#buckconfig) of the cell this target belongs to), `path/to/package` is the [package](#package) directory that contains the [build file](#build-file) declaring the target (relative to the mapped cell alias) and `:target` is the target's name.
+
 #### Toolchain
 :::note
 🚧   THIS SECTION IS UNDER CONSTRUCTION
 :::
 #### Transition
-:::note
-🚧   THIS SECTION IS UNDER CONSTRUCTION
-:::
+
+Allows the [configuration](#configuration) to change across a [dependency](#dependency) edge. That is, normally,  if [target](#target) A depends on target B, then if the configuration for A is X, then B is configured using X too. Using a transition, you can produce X' to configure B instead.
+
 #### Unconfigured graph
-:::note
-🚧   THIS SECTION IS UNDER CONSTRUCTION
-:::
+
+Graph of [targets](#target) before [configurations](#configuration) are applied. Can be queried via `buck2 uquery`.
+
 #### Visibility
-:::note
-🚧   THIS SECTION IS UNDER CONSTRUCTION
-:::
+
+Visibility determines whether a [target](#target) can include another [target](#target) as its [dependency](#dependency). See more: [Visibility](./visibility.md).
